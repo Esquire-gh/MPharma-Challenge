@@ -1,6 +1,14 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-# Create your views here.
+from rest_framework import generics
 
-def index(request):
-    return HttpResponse("All SET!!!")
+from diagnosis_codes.models import Code
+from diagnosis_codes.serializers import CodeSerializer
+
+
+class CodeList(generics.ListCreateAPIView):
+    queryset = Code.objects.all()
+    serializer_class = CodeSerializer
+
+
+class CodeDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Code.objects.all()
+    serializer_class = CodeSerializer
