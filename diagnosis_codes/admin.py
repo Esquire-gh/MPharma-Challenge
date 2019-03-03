@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Code
+from .models import DiagnosisCode
 # Register your models here.
 
-admin.site.register(Code)
+admin.site.register(DiagnosisCode)

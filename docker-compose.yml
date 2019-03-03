@@ -6,7 +6,6 @@ services:
 
   web:
     build: .
-    command: python /app/manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/app/
     ports:

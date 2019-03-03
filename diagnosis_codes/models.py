@@ -13,8 +13,8 @@ with open(categories_file, 'r') as csv_file:
     for row in csv_reader:
         CATEGORIES_LIST.append((row[0], row[1]))
 
-# Create your models here.
-class Code(models.Model):
+
+class DiagnosisCode(models.Model):
     category_code = models.CharField(max_length=20, choices=tuple(CATEGORIES_LIST))
     diagnosis_code = models.IntegerField(blank=True)
     full_code = models.CharField(max_length=20)
