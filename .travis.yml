@@ -1,7 +1,9 @@
 sudo: required
-
+language: python
 services: 
   - docker
+
+install: pip instal -r requirements.txt
 
 before_script:
   - docker-compose build
