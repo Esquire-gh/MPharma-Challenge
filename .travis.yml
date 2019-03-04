@@ -20,5 +20,5 @@ install:
 
 
 script:
-  - docker-compose up
+  - docker-compose run -d web
   - ./scripts/run_tests.sh mpharmachallenge_web_1
