@@ -28,4 +28,5 @@ try:
             if count == 100: break 
             else: count+=1
 except Exception as e:
-    logger.debug("{}".format(e))
+    logger.exception(e)
+    logger.debug("Error occured in populating categories", exc_info=True)

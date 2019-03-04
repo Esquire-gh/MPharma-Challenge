@@ -9,6 +9,7 @@ from diagnosis_codes.models import DiagnosisCode, Category
 from diagnosis_codes.serializers import (DiagnosisCodeSerializer,
                                          CategorySerializer)
 
+import logging as logger
 
 class CodeList(APIView):
     """
@@ -29,16 +30,22 @@ class CodeList(APIView):
             category_title = request.data['category_title']
             category_code = request.data['category_code']
         except KeyError as e:
+            logger.exception(e)
+            logger.debug("Missing necessary values in post data. Missing:",
+                         exc_info=True)
             return Response({"error": "Check data. {} missing".format(e)},
                             status=status.HTTP_400_BAD_REQUEST)
         try:
             category = Category.objects.get(version=version_name,
                                             code=category_code,
                                             title=category_title)
-        except ObjectDoesNotExist:
+        except ObjectDoesNotExist as e:
+            logger.exception(e)
+            logger.debug("diagnosis creation requires valid Category. \
+                         Details given are not valid", exc_info=True)
             return Response({"error": "Invalid Category"},
                             status=status.HTTP_400_BAD_REQUEST)
-        
+
         del request.data['category_title'], request.data['category_code']
         request.data['category'] = category.id
 
@@ -56,7 +63,9 @@ class CodeDetail(APIView):
     def get_object(self, pk):
         try:
             return DiagnosisCode.objects.get(pk=pk)
-        except DiagnosisCode.DoesNotExist:
+        except DiagnosisCode.DoesNotExist as e:
+            logger.exception(e)
+            logger.debug('Could not get diagnosis object', exc_info=True)
             raise Http404
 
     def get(self, request, pk, format=None):
