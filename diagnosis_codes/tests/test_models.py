@@ -1,3 +1,5 @@
 from django.test import TestCase
 
-# Create your tests here.
+# No test for models since since they haven't been modified
+# by any custom code
+

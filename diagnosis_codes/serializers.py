@@ -1,13 +1,19 @@
 from rest_framework import serializers
-from .models import DiagnosisCode
+from .models import DiagnosisCode, Category
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ('version', 'code', 'title')
+
 
 class DiagnosisCodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = DiagnosisCode
         fields = ('id',
-                  'category_code', 
+                  'category',
                   'diagnosis_code',
                   'full_code',
                   'abbreviated_description',
-                  'full_description',
-                  'category_title')
+                  'full_description')

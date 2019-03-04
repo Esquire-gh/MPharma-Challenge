@@ -2,10 +2,13 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import Http404
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import generics
 
-from diagnosis_codes.models import DiagnosisCode
-from diagnosis_codes.serializers import DiagnosisCodeSerializer
+from diagnosis_codes.models import DiagnosisCode, Category
+from diagnosis_codes.serializers import (DiagnosisCodeSerializer,
+                                         CategorySerializer)
+
 
 class CodeList(APIView):
     """
@@ -17,6 +20,24 @@ class CodeList(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
+        try:
+            version_name = request.data['version']
+            category_title = request.data['category_title']
+            category_code = request.data['category_code']
+        except KeyError as e:
+            return Response({"error": "Check data. {} missing".format(e)},
+                            status=status.HTTP_400_BAD_REQUEST)
+        try:
+            category = Category.objects.get(version=version_name,
+                                            code=category_code,
+                                            title=category_title)
+        except ObjectDoesNotExist:
+            return Response({"error": "Invalid Category"},
+                            status=status.HTTP_400_BAD_REQUEST)
+        
+        del request.data['category_title'], request.data['category_code']
+        request.data['category'] = category.id
+
         serializer = DiagnosisCodeSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -41,6 +62,7 @@ class CodeDetail(APIView):
 
     def put(self, request, pk, format=None):
         code = self.get_object(pk)
+        request.data['category'] = code.category.id
         serializer = DiagnosisCodeSerializer(code, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -53,18 +75,6 @@ class CodeDetail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-# USING GENERICS FOR SIMPLIFICATION
-# class CodeList(generics.ListCreateAPIView):
-#     """
-#         List all diagnosis codes, or create a new code
-#     """
-#     queryset = DiagnosisCode.objects.all()
-#     serializer_class = DiagnosisCodeSerializer
-
-
-# class CodeDetail(generics.RetrieveUpdateDestroyAPIView):
-#     """
-#         Retrieve, Update or Delete an single code entry.
-#     """
-#     queryset = DiagnosisCode.objects.all()
-#     serializer_class = DiagnosisCodeSerializer
+class CategoryList(generics.ListCreateAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
