@@ -16,7 +16,9 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
+v1 = 'v1' #API VERSION
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'', include('diagnosis_codes.urls'))
+    url(r'^api/{}/'.format(v1), include('diagnosis_codes.urls'))
 ]

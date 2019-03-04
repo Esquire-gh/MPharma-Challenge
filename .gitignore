@@ -1,5 +1,6 @@
 __pycache__/
 .env
+db.sqlite3
 
 # Unit test / coverage reports
 htmlcov/
@@ -11,4 +12,3 @@ nosetests.xml
 coverage.xml
 *.cover
 .hypothesis/
-
