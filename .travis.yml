@@ -20,6 +20,6 @@ install:
 
 
 script:
-  - docker-compose run -d web
-  - ./scripts/run_tests.sh mpharmachallenge_web_1
+  - docker-compose run -d web --name src_web_1
+  - ./scripts/run_tests.sh src_web_1
   - docker-compose stop
