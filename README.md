@@ -15,7 +15,7 @@ This repository contains code for an mPharma coding interview problem
 ## Testing API
 ### Automated Test
 After starting the application:
-- Run the command `docker exec <web container name> python manage.py test` from the app's root directory(where you have the manage.py file).
+- Run the command `./scripts/run_tests.sh <web container name>` from the app's root directory(where you have the manage.py file).
 
 ### Manual Test
 The API has two endpoints that support the following operations
