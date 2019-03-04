@@ -1,0 +1,2 @@
+SECRET_KEY=ui!i7oviyjwiqaf9g(ki&z*#6fz1^$v!%h&wzc#$zp&$5(2k-y
+DATABASE_URL=postgres://postgres@db:5432/postgres

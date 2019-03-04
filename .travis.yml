@@ -5,6 +5,7 @@ services:
 
 before_script:
   - docker-compose build
+  - python manage.py shell < scripts/generate_env_file.py
 
 script:
   - docker-compose up

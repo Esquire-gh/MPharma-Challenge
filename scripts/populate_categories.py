@@ -1,17 +1,11 @@
 
 import os
 import csv
-import logging
-
 
 from diagnosis_codes.models import Category
 from mpharma_challenge.settings.base import BASE_DIR
 
-logger = logging.Logger(__name__)
-logger.setLevel(logging.DEBUG)
-
-console_handler = logging.StreamHandler()
-logger.addHandler(console_handler)
+from .util import logger
 
 VERSION='ICD-10-2018'
 
