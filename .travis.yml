@@ -7,9 +7,14 @@ python:
 services: 
   - docker
 
+env:
+  global:
+    - SECRET_KEY=fake_django_secret_key
+    - DATABASE_URL=postgres://postgres@db:5432/postgres
+
 before_script:
   - docker-compose build
 
 script:
   - docker-compose up
-  - ./scripts/run_tests.sh
+  - ./scripts/run_tests.sh mpharmachallenge_web_1
