@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.http import Http404
 from django.core.exceptions import ObjectDoesNotExist
-from rest_framework import generics
+from rest_framework.pagination import PageNumberPagination
 
 from diagnosis_codes.models import DiagnosisCode, Category
 from diagnosis_codes.serializers import (DiagnosisCodeSerializer,
@@ -14,10 +14,14 @@ class CodeList(APIView):
     """
         List all diagnosis codes, or create a new code
     """
+
     def get(self, request, format=None):
         codes = DiagnosisCode.objects.all()
-        serializer = DiagnosisCodeSerializer(codes, many=True)
-        return Response(serializer.data)
+        paginator = PageNumberPagination()
+        paginator.page_size = 20
+        page = paginator.paginate_queryset(codes, request)
+        serializer = DiagnosisCodeSerializer(page, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
     def post(self, request, format=None):
         try:
