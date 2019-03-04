@@ -23,7 +23,7 @@ class TestCodeListViews(APITestCase):
         response = self.client.get(self.code_list_create_url)
 
         self.assertEquals(response.status_code, 200)
-        self.assertEquals([], response.data)
+        self.assertEquals([], response.data['results'])
 
     def test_code_creation_POST(self):
         data = {
