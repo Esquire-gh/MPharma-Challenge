@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mpharmaChallenge.settings.production")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mpharma_challenge.settings.production")
 
 application = get_wsgi_application()

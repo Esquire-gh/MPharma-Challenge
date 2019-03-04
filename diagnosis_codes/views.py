@@ -3,21 +3,26 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.http import Http404
 from django.core.exceptions import ObjectDoesNotExist
-from rest_framework import generics
+from rest_framework.pagination import PageNumberPagination
 
 from diagnosis_codes.models import DiagnosisCode, Category
 from diagnosis_codes.serializers import (DiagnosisCodeSerializer,
                                          CategorySerializer)
 
+import logging as logger
 
 class CodeList(APIView):
     """
         List all diagnosis codes, or create a new code
     """
+
     def get(self, request, format=None):
         codes = DiagnosisCode.objects.all()
-        serializer = DiagnosisCodeSerializer(codes, many=True)
-        return Response(serializer.data)
+        paginator = PageNumberPagination()
+        paginator.page_size = 20
+        page = paginator.paginate_queryset(codes, request)
+        serializer = DiagnosisCodeSerializer(page, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
     def post(self, request, format=None):
         try:
@@ -25,16 +30,22 @@ class CodeList(APIView):
             category_title = request.data['category_title']
             category_code = request.data['category_code']
         except KeyError as e:
+            logger.exception(e)
+            logger.debug("Missing necessary values in post data. Missing:",
+                         exc_info=True)
             return Response({"error": "Check data. {} missing".format(e)},
                             status=status.HTTP_400_BAD_REQUEST)
         try:
             category = Category.objects.get(version=version_name,
                                             code=category_code,
                                             title=category_title)
-        except ObjectDoesNotExist:
+        except ObjectDoesNotExist as e:
+            logger.exception(e)
+            logger.debug("diagnosis creation requires valid Category. \
+                         Details given are not valid", exc_info=True)
             return Response({"error": "Invalid Category"},
                             status=status.HTTP_400_BAD_REQUEST)
-        
+
         del request.data['category_title'], request.data['category_code']
         request.data['category'] = category.id
 
@@ -52,7 +63,9 @@ class CodeDetail(APIView):
     def get_object(self, pk):
         try:
             return DiagnosisCode.objects.get(pk=pk)
-        except DiagnosisCode.DoesNotExist:
+        except DiagnosisCode.DoesNotExist as e:
+            logger.exception(e)
+            logger.debug('Could not get diagnosis object', exc_info=True)
             raise Http404
 
     def get(self, request, pk, format=None):

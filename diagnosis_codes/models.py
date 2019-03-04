@@ -1,12 +1,9 @@
 from django.db import models
-from django.conf import settings
-
-import os
-import csv
 
 CODE_VERSION = (
     ('ICD-10-2018', 'ICD-10 Verion:2018'),
 )
+
 
 class Category(models.Model):
     version = models.CharField(max_length=30, choices=CODE_VERSION)
