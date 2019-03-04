@@ -73,8 +73,3 @@ class CodeDetail(APIView):
         code = self.get_object(pk)
         code.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class CategoryList(generics.ListCreateAPIView):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
