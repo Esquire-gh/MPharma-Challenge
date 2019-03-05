@@ -23,17 +23,29 @@ env = environ.Env(
 )
 
 ENV_FILE = os.path.join(BASE_DIR, '.env')
-environ.Env.read_env(env_file=ENV_FILE)
+if os.path.isfile(ENV_FILE):
+    environ.Env.read_env(env_file=ENV_FILE)
+
+    # SECURITY WARNING: keep the secret key used in production secret!
+    SECRET_KEY = env('SECRET_KEY')
+
+    # Database
+    # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
+
+    DATABASES = {'default': env.db('DATABASE_URL')}
+else:
+    SECRET_KEY = os.environ['SECRET_KEY']
+    DATABASES = {'default': os.environ['DATABASE_URL']}
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -78,14 +90,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'mpharma_challenge.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-
-DATABASES = {
-    'default': env.db('DATABASE_URL')
-}
 
 
 # Password validation

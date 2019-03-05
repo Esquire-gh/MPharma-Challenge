@@ -1,6 +1,7 @@
 __pycache__/
 .env
 db.sqlite3
+mydatabase
 
 # Unit test / coverage reports
 htmlcov/

@@ -1,0 +1,22 @@
+sudo: required
+
+language: python
+python:
+  - 3.6
+services: 
+  - docker
+
+env:
+  global:
+    - DEBUG=False
+    - SECRET_KEY="fake_django_secret_key"
+    - DATABASE_URL=postgres://postgres@db:5432/postgres
+
+before_install:
+  - env > .env
+
+install:
+  - docker-compose build
+
+script:
+  - docker-compose run web bash ./scripts/run_tests.sh
