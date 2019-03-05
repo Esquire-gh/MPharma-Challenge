@@ -18,8 +18,5 @@ before_install:
 install:
   - docker-compose build
 
-
 script:
-  - docker-compose run -d web --name src_web_1
-  - ./scripts/run_tests.sh src_web_1
-  - docker-compose stop
+  - docker-compose run web bash ./scripts/run_tests.sh

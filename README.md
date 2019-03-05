@@ -15,7 +15,7 @@ This repository contains code for an mPharma coding interview problem
 ## Testing API
 ### Automated Test
 After starting the application:
-- Run the command `./scripts/run_tests.sh <web container name>` from the app's root directory(where you have the manage.py file).
+- Run the command `docker-compose run web bash ./scripts/run_tests.sh` from the app's root directory(where you have the manage.py file).
 
 ### Manual Test
 The API has two endpoints that support the following operations
@@ -54,5 +54,10 @@ NB: `category_code` and `category_title` must be valid
 
 
 ## Architectural Considerations
-
-
+This section explains some of the arhitectural decisions made for this project
+#### 1. Models
+- The Schema for diagnosis codes has been separated into two models; `Category` and `DiagnosisCode`. 
+- This decision is mainly to facilitate backward incompatibility of diagnosis codes and also ensure normalization of data.
+- The `Category` model contains all the category codes for for a specific version of diagnosis codes. 
+- The decision to use `choices` to store the different version is to avoid making an extra query to retrieve the version of a 
+Category.
