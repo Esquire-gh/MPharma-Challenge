@@ -60,4 +60,4 @@ This section explains some of the arhitectural decisions made for this project
 - This decision is mainly to facilitate backward incompatibility of diagnosis codes and also ensure normalization of data.
 - The `Category` model contains all the category codes for for a specific version of diagnosis codes. 
 - The decision to use `choices` to store the different version is to avoid making an extra query to retrieve the version of a 
-Category.
+Category. Currently only the `ICD-10-2018` version is supported.
